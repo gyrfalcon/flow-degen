@@ -3,7 +3,7 @@ import assert from 'assert'
 import path from 'path'
 import {
   degenString,
-} from '../src/generator.js'
+} from '../src/index.js'
 
 import { codeGen } from '../src/base-gen.js'
 

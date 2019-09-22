@@ -6,7 +6,7 @@ import {
   degenMaybe,
   degenObject,
   degenString,
-} from '../src/generator.js'
+} from '../src/index.js'
 import { runFlow } from './utils.js'
 import { codeGen } from '../src/base-gen.js'
 

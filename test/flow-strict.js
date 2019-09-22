@@ -1,7 +1,7 @@
 // @flow strict
 import assert from 'assert'
 import path from 'path'
-import { degenString } from '../src/generator.js'
+import { degenString } from '../src/index.js'
 import { runFlow } from './utils.js'
 
 import { codeGen } from '../src/base-gen.js'
