@@ -14,8 +14,8 @@ export type ParamType<T: string> = {
   foo: T,
 }
 
-const stringType = { name: 'string', typeParams: [] }
-const paramTypeType = { name: 'ParamType', typeParams: [ stringType ] }
+const stringType = { literal: false, name: 'string', typeParams: [] }
+const paramTypeType = { literal: false, name: 'ParamType', typeParams: [ stringType ] }
 
 const maybeStringGenerator = () => degenMaybe(stringType, degenString())
 const paramTypeGenerator = () => degenMaybe(paramTypeType, degenObject(

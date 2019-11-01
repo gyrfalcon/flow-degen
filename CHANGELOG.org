@@ -30,6 +30,11 @@
        before.
     2. =codeGen= takes a =prettify= flag as the second argument. Use =true= for
        this argument to keep your original behavior.
+    3. =MetaType= has been expanded to include use cases like
+       =$PropertyType<T, k>= where =k= is a string literal and not a type. This
+       includes the addition of a =literal= bool field to differentiate between
+       literal =MetaType=s and non-literal =MetaType=s. Consumers will need to
+       update local =MetaType=s to add this property.
 *** Additions
     1. The =degenObject= generator now takes a list of optional fields so any
        field that is an optional type (not necessarily a maybe type) can also be

@@ -25,9 +25,9 @@ export type Config<CustomType: string, CustomImport: string> = {
   typeLocations: {[CustomType]: string},
 }
 
-const stringType = { name: 'string', typeParams: [] }
-const configType = { name: 'Config', typeParams: [ stringType, stringType ]}
-const configGeneratorType = { name: 'ConfigGenerator', typeParams: []}
+const stringType = { literal: false, name: 'string', typeParams: [] }
+const configType = { literal: false, name: 'Config', typeParams: [ stringType, stringType ]}
+const configGeneratorType = { literal: false, name: 'ConfigGenerator', typeParams: []}
 
 export const degenConfig = () => degenObject<string, string>(configType, [
   degenField('baseDir', degenFilePath()),

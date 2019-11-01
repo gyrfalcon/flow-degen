@@ -16,7 +16,7 @@ export type MixedObj = {
   optional?: number,
 }
 
-const mixedObjType = { name: 'MixedObj', typeParams: [] }
+const mixedObjType = { literal: false, name: 'MixedObj', typeParams: [] }
 const mixedObjGenerator = () => degenObject(mixedObjType, [
   degenField('required', degenString()),
 ], [
@@ -59,7 +59,7 @@ export type OptionalObj = {
   optionalAlso?: string,
 }
 
-const optionalObjType = { name: 'OptionalObj', typeParams: [] }
+const optionalObjType = { literal: false, name: 'OptionalObj', typeParams: [] }
 const optionalObjGenerator = () => degenObject(optionalObjType, [
 ], [
   degenField('optional', degenNumber()),

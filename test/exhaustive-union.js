@@ -40,11 +40,11 @@ export type Baz = {
   c: bool,
 }
 
-const unionType = { name: 'Union', typeParams: [] }
-const unionKindType = { name: 'UnionKind', typeParams: [] }
-const fooType = { name: 'Foo', typeParams: [] }
-const barType = { name: 'Bar', typeParams: [] }
-const bazType = { name: 'Baz', typeParams: [] }
+const unionType = { literal: false, name: 'Union', typeParams: [] }
+const unionKindType = { literal: false, name: 'UnionKind', typeParams: [] }
+const fooType = { literal: false, name: 'Foo', typeParams: [] }
+const barType = { literal: false, name: 'Bar', typeParams: [] }
+const bazType = { literal: false, name: 'Baz', typeParams: [] }
 
 const generator = () => degenSum(unionType, 'kind', unionKindType, [
   degenSentinelValue('foo', degenObject(fooType, [

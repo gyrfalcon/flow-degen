@@ -23,9 +23,9 @@ export type Baz = {
   c: Bar,
 }
 
-const fooType = { name: 'Foo', typeParams: [] }
-const barType = { name: 'Bar', typeParams: [] }
-const bazType = { name: 'Baz', typeParams: [] }
+const fooType = { literal: false, name: 'Foo', typeParams: [] }
+const barType = { literal: false, name: 'Bar', typeParams: [] }
+const bazType = { literal: false, name: 'Baz', typeParams: [] }
 
 const fooGenerator = () => degenObject(fooType, [
   degenField('a', degenString()),

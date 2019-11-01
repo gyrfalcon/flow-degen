@@ -57,8 +57,8 @@ const customDegen = (
   ]
 }
 
-const stringType = { name: 'string', typeParams: [] }
-const fooType = { name: 'Foo', typeParams: [] }
+const stringType = { literal: false, name: 'string', typeParams: [] }
+const fooType = { literal: false, name: 'Foo', typeParams: [] }
 
 const generator = () => customDegen(
   fooType,

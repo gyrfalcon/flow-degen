@@ -14,7 +14,7 @@ import {
 
 import { stringify } from './deserializer.js'
 
-export type DeType =
+export type NativeType =
   | 'Object'
   | 'bool'
   | 'boolean'
@@ -22,6 +22,15 @@ export type DeType =
   | 'number'
   | 'object'
   | 'string'
+
+export type FlowUtilityType =
+  | '$ElementType'
+  | '$NonMaybeType'
+  | '$PropertyType'
+
+export type DeType =
+  | NativeType
+  | FlowUtilityType
 
 export type DeImport =
   | 'stringify'
@@ -32,10 +41,21 @@ export type DeImport =
   | 'deNumber'
   | 'deString'
 
-export type MetaType<CustomType: string, CustomImport: string> = {
+type LiteralType<CustomType: string> = {|
+  literal: true,
+  name: 'literal',
+  value: CustomType | DeType,
+|}
+
+type NonLiteralType<CustomType: string, CustomImport: string> = {|
+  literal: false,
   name: CustomType | DeType,
   typeParams: Array<MetaType<CustomType, CustomImport>>,
-}
+|}
+
+export type MetaType<CustomType: string, CustomImport: string> =
+  | NonLiteralType<CustomType, CustomImport>
+  | LiteralType<CustomType>
 
 export type CodeGenDep<CustomType: string, CustomImport: string> = {
   types: Array<MetaType<CustomType, CustomImport>>,
@@ -197,7 +217,7 @@ export const degenString = <CustomType: string, CustomImport: string>(
   return [() => {
     return `deString`
   }, {
-    types: [ { name: 'string', typeParams: [] } ],
+    types: [ { literal: false, name: 'string', typeParams: [] } ],
     imports: ['deString'],
     hoists: [],
   }]
@@ -343,11 +363,18 @@ const ${fnName} = (x: mixed): ${typeHeader} | Error => {
 export const typeHeader = <CustomType: string, CustomImport: string>(
   type: MetaType<CustomType, CustomImport>,
 ): string => {
-  if(type.typeParams.length > 0) {
-    const params = type.typeParams.map(typeHeader)
-    return `${type.name}<${params.join(', ')}>`
-  }
-  else {
+  if (type.literal) {
+    const literal: LiteralType<CustomType> = type
+    return stringify(literal.value)
+  } else if (!type.literal) {
+    const nonLiteral: NonLiteralType<CustomType, CustomImport> = type
+    if (nonLiteral.typeParams.length > 0) {
+      const params = nonLiteral.typeParams.map(typeHeader)
+      return `${nonLiteral.name}<${params.join(', ')}>`
+    } else {
+      return nonLiteral.name
+    }
+  } else {
     // Kind of a weird case to support.
     return type.name
   }
@@ -356,11 +383,16 @@ export const typeHeader = <CustomType: string, CustomImport: string>(
 export const flattenTypes = <CustomType: string, CustomImport: string>(
   type: MetaType<CustomType, CustomImport>,
 ): Array<MetaType<CustomType, CustomImport>> => {
-  const nestedTypes = type.typeParams.map(flattenTypes)
-  return reduce<
-    Array<MetaType<CustomType, CustomImport>>,
-    Array<MetaType<CustomType, CustomImport>>,
-  >(concat, [ type ], nestedTypes)
+  if (!type.literal) {
+    const nonLiteral: NonLiteralType<CustomType, CustomImport> = type
+    const nestedTypes = nonLiteral.typeParams.map(flattenTypes)
+    return reduce<
+      Array<MetaType<CustomType, CustomImport>>,
+      Array<MetaType<CustomType, CustomImport>>,
+    >(concat, [ nonLiteral ], nestedTypes)
+  } else {
+    return []
+  }
 }
 
 export const degenType = <CustomType: string, CustomImport: string>(
